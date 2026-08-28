@@ -6,28 +6,28 @@
    1. CSS Custom Properties / Theme Tokens
    -------------------------------------------------------------------------- */
 :root {
-    /* Color Palette - Cyber Emerald & Electric Violet Dark Theme (Default) */
-    --bg-primary: #090d16;
-    --bg-secondary: #0f172a;
-    --bg-card: rgba(15, 23, 42, 0.75);
-    --bg-card-hover: rgba(30, 41, 59, 0.85);
-    --bg-glass: rgba(15, 23, 42, 0.85);
+    /* Color Palette - Deep Space Black & Electric Sapphire Blue Theme */
+    --bg-primary: #030712;
+    --bg-secondary: #0b1329;
+    --bg-card: rgba(11, 19, 41, 0.75);
+    --bg-card-hover: rgba(20, 34, 68, 0.85);
+    --bg-glass: rgba(11, 19, 41, 0.85);
     
     --text-primary: #f8fafc;
     --text-secondary: #94a3b8;
     --text-muted: #64748b;
-    --text-highlight: #a855f7;
+    --text-highlight: #60a5fa;
 
-    /* Accent Gradients & Colors - Emerald, Violet, Gold */
-    --accent-primary: #10b981;   /* Cyber Emerald */
-    --accent-secondary: #8b5cf6; /* Electric Violet */
-    --accent-tertiary: #f59e0b;  /* Gold Amber */
-    --accent-gradient: linear-gradient(135deg, #10b981 0%, #6366f1 50%, #a855f7 100%);
-    --accent-glow: rgba(16, 185, 129, 0.3);
+    /* Accent Gradients & Colors - Electric Sapphire & Neon Cyan Blue */
+    --accent-primary: #3b82f6;   /* Electric Sapphire Blue */
+    --accent-secondary: #06b6d4; /* Neon Cyan */
+    --accent-tertiary: #1d4ed8;  /* Deep Royal Blue */
+    --accent-gradient: linear-gradient(135deg, #2563eb 0%, #3b82f6 50%, #06b6d4 100%);
+    --accent-glow: rgba(59, 130, 246, 0.3);
     
     /* Borders & Dividers */
-    --border-color: rgba(255, 255, 255, 0.09);
-    --border-hover: rgba(16, 185, 129, 0.45);
+    --border-color: rgba(59, 130, 246, 0.18);
+    --border-hover: rgba(59, 130, 246, 0.5);
     
     /* Typography Fonts */
     --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -35,10 +35,10 @@
     --font-mono: 'Fira Code', monospace;
     
     /* Shadows & Effects */
-    --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-    --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
-    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
-    --shadow-glow: 0 0 30px var(--accent-glow);
+    --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
+    --shadow-glow: 0 0 35px var(--accent-glow);
     
     /* Layout & Transitions */
     --radius-sm: 8px;
@@ -46,31 +46,31 @@
     --radius-lg: 20px;
     --radius-full: 9999px;
     --transition-fast: 0.2s ease;
-    --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-normal: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     --nav-height: 76px;
 }
 
 /* Light Theme Overrides */
 [data-theme="light"] {
     --bg-primary: #f8fafc;
-    --bg-secondary: #edf2f7;
-    --bg-card: rgba(255, 255, 255, 0.9);
+    --bg-secondary: #eff6ff;
+    --bg-card: rgba(255, 255, 255, 0.92);
     --bg-card-hover: #ffffff;
-    --bg-glass: rgba(255, 255, 255, 0.9);
+    --bg-glass: rgba(255, 255, 255, 0.92);
     
     --text-primary: #0f172a;
     --text-secondary: #334155;
     --text-muted: #64748b;
-    --text-highlight: #7c3aed;
+    --text-highlight: #2563eb;
 
-    --accent-primary: #059669;
-    --accent-secondary: #7c3aed;
-    --accent-tertiary: #d97706;
-    --accent-gradient: linear-gradient(135deg, #059669 0%, #7c3aed 50%, #d97706 100%);
-    --accent-glow: rgba(5, 150, 105, 0.2);
+    --accent-primary: #2563eb;
+    --accent-secondary: #0891b2;
+    --accent-tertiary: #1d4ed8;
+    --accent-gradient: linear-gradient(135deg, #2563eb 0%, #0891b2 100%);
+    --accent-glow: rgba(37, 99, 235, 0.2);
     
-    --border-color: rgba(0, 0, 0, 0.08);
-    --border-hover: rgba(5, 150, 105, 0.4);
+    --border-color: rgba(37, 99, 235, 0.12);
+    --border-hover: rgba(37, 99, 235, 0.4);
     
     --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
     --shadow-md: 0 8px 16px rgba(0, 0, 0, 0.08);

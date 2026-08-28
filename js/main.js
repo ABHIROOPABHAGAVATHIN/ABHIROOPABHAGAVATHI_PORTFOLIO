@@ -367,29 +367,33 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (isValid) {
-                // Show loading spinner on button
+                const targetEmail = "abhiroopabhagavathi@gmail.com";
+
+                // Show button sending state
                 if (submitBtn) {
                     submitBtn.disabled = true;
                     submitBtn.innerHTML = `
                         <svg class="spinner" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation: spin 1s linear infinite;"><circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-dashoffset="10"></circle></svg>
-                        <span>Sending Real Email to abhiroopabhagavathi@gmail.com...</span>
+                        <span>Redirecting to Mail & Dispatching...</span>
                     `;
                 }
 
-                // Dispatch real email via Web3Forms API + Mailto Fallback
-                const targetEmail = "abhiroopabhagavathi@gmail.com";
+                // Construct real mailto URL to redirect user's mail client directly to abhiroopabhagavathi@gmail.com
+                const mailBody = `Hello Abhiroopa,\n\nName: ${nameVal}\nEmail: ${emailVal}\n\nMessage:\n${messageVal}`;
+                const mailtoUrl = `mailto:${targetEmail}?subject=${encodeURIComponent(subjectVal || "Portfolio Inquiry")}&body=${encodeURIComponent(mailBody)}`;
+
+                // Attempt Web3Forms HTTP API dispatch asynchronously
                 const formData = new FormData();
-                formData.append("access_key", "c83e18a9-4674-4b5b-9d56-a1856c9a3bbd"); // Web3Forms key
+                formData.append("access_key", "c83e18a9-4674-4b5b-9d56-a1856c9a3bbd");
                 formData.append("name", nameVal);
                 formData.append("email", emailVal);
-                formData.append("subject", subjectVal || `New Portfolio Message from ${nameVal}`);
+                formData.append("subject", subjectVal || `New Portfolio Inquiry from ${nameVal}`);
                 formData.append("message", messageVal);
 
-                fetch("https://api.web3forms.com/submit", {
-                    method: "POST",
-                    body: formData
-                }).then(res => res.json())
-                .then(data => {
+                fetch("https://api.web3forms.com/submit", { method: "POST", body: formData }).catch(() => {});
+
+                // Delay slightly for smooth UI response, then redirect & show auto-responder receipt
+                setTimeout(() => {
                     if (submitBtn) {
                         submitBtn.disabled = false;
                         submitBtn.innerHTML = `
@@ -398,29 +402,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         `;
                     }
 
-                    if (data.success) {
-                        showToast(`Real email sent to ${targetEmail}! Automated reply dispatched.`);
-                    } else {
-                        // Open direct mailto if API token needs verification
-                        window.location.href = `mailto:${targetEmail}?subject=${encodeURIComponent(subjectVal || "Portfolio Contact")}&body=${encodeURIComponent("Name: " + nameVal + "\nEmail: " + emailVal + "\n\nMessage:\n" + messageVal)}`;
-                        showToast(`Email dispatched to ${targetEmail}! Automated reply triggered.`);
-                    }
+                    showToast(`Redirecting mail to ${targetEmail}! Automated response triggered.`);
+                    
+                    // Open mail redirect
+                    window.location.href = mailtoUrl;
 
-                    contactForm.reset();
+                    // Trigger Auto-Responder Receipt Modal
                     triggerAutoReplyModal(nameVal, emailVal, subjectVal);
-                }).catch(() => {
-                    if (submitBtn) {
-                        submitBtn.disabled = false;
-                        submitBtn.innerHTML = `
-                            <span class="btn-text">Send Real Email & Trigger Auto-Reply</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-                        `;
-                    }
-                    window.location.href = `mailto:${targetEmail}?subject=${encodeURIComponent(subjectVal || "Portfolio Contact")}&body=${encodeURIComponent("Name: " + nameVal + "\nEmail: " + emailVal + "\n\nMessage:\n" + messageVal)}`;
-                    showToast(`Mail client triggered for ${targetEmail}! Auto-reply shown.`);
                     contactForm.reset();
-                    triggerAutoReplyModal(nameVal, emailVal, subjectVal);
-                });
+                }, 600);
 
             } else {
                 showToast('Please fill out all required fields correctly.', 'error');
