@@ -4,24 +4,37 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     // ----------------------------------------------------------------------
+    // 0. Initialize EmailJS
+    // ----------------------------------------------------------------------
+    const PUBLIC_KEY = "njTQ_pFaRq5ufAKFb";
+    const SERVICE_ID = "service_jqn4xas";
+    const TEMPLATE_ID_NOTIFICATION = "template_o5588i2";
+    const TEMPLATE_ID_AUTOREPLY = "template_8pqz4zm";
+
+    if (typeof emailjs !== 'undefined') {
+        emailjs.init({ publicKey: PUBLIC_KEY });
+    }
+
+    // ----------------------------------------------------------------------
     // 1. Theme Switcher (Dark / Light Mode)
     // ----------------------------------------------------------------------
     const themeToggleBtn = document.getElementById('theme-toggle');
     const htmlElement = document.documentElement;
 
-    // Check saved theme or default to dark
     const savedTheme = localStorage.getItem('portfolio-theme') || 'dark';
     htmlElement.setAttribute('data-theme', savedTheme);
 
-    themeToggleBtn.addEventListener('click', () => {
-        const currentTheme = htmlElement.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        
-        htmlElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('portfolio-theme', newTheme);
-        
-        showToast(`Switched to ${newTheme === 'dark' ? 'Dark' : 'Light'} Mode`);
-    });
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', () => {
+            const currentTheme = htmlElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            htmlElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('portfolio-theme', newTheme);
+            
+            showToast(`Switched to ${newTheme === 'dark' ? 'Dark' : 'Light'} Mode`);
+        });
+    }
 
     // ----------------------------------------------------------------------
     // 2. Navbar Sticky Scroll & Active Link Tracking
@@ -31,13 +44,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const sections = document.querySelectorAll('section[id]');
 
     function handleNavScroll() {
+        if (!navbar) return;
         if (window.scrollY > 20) {
             navbar.classList.add('scrolled');
         } else {
             navbar.classList.remove('scrolled');
         }
 
-        // Active link tracking
         let currentSectionId = '';
         const scrollPosition = window.scrollY + 120;
 
@@ -58,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     window.addEventListener('scroll', handleNavScroll);
-    handleNavScroll(); // Initial run
+    handleNavScroll();
 
     // ----------------------------------------------------------------------
     // 3. Mobile Navigation Menu Drawer
@@ -66,18 +79,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const mobileToggle = document.getElementById('mobile-toggle');
     const navMenu = document.getElementById('nav-menu');
 
-    mobileToggle.addEventListener('click', () => {
-        navMenu.classList.toggle('active');
-        mobileToggle.classList.toggle('open');
-    });
-
-    // Close mobile menu when clicking a nav link
-    navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            navMenu.classList.remove('active');
-            mobileToggle.classList.remove('open');
+    if (mobileToggle && navMenu) {
+        mobileToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            mobileToggle.classList.toggle('open');
         });
-    });
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                mobileToggle.classList.remove('open');
+            });
+        });
+    }
 
     // ----------------------------------------------------------------------
     // 4. Scroll Reveal Animations (IntersectionObserver)
@@ -188,11 +202,11 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.addEventListener('click', () => {
             const key = btn.getAttribute('data-project');
             const data = projectData[key];
-            if (data) {
+            if (data && projectModal && modalProjectTitle && modalProjectContent) {
                 modalProjectTitle.textContent = data.title;
                 modalProjectContent.innerHTML = `
                     <div style="margin-bottom: 1rem;">
-                        <span style="font-size: 0.85rem; font-weight: 700; color: var(--accent-primary); background: rgba(6, 182, 212, 0.1); padding: 0.2rem 0.6rem; border-radius: 4px;">${data.type}</span>
+                        <span style="font-size: 0.85rem; font-weight: 700; color: var(--accent-primary); background: rgba(59, 130, 246, 0.1); padding: 0.2rem 0.6rem; border-radius: 4px;">${data.type}</span>
                     </div>
                     <div>${data.description}</div>
                     <div style="margin-top: 1.5rem;">
@@ -209,12 +223,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function closeProjectModal() {
-        projectModal.classList.remove('active');
-        projectModal.setAttribute('aria-hidden', 'true');
+        if (projectModal) {
+            projectModal.classList.remove('active');
+            projectModal.setAttribute('aria-hidden', 'true');
+        }
     }
 
-    closeProjectModalBtn.addEventListener('click', closeProjectModal);
-    projectModalOverlay.addEventListener('click', closeProjectModal);
+    if (closeProjectModalBtn) closeProjectModalBtn.addEventListener('click', closeProjectModal);
+    if (projectModalOverlay) projectModalOverlay.addEventListener('click', closeProjectModal);
 
     // ----------------------------------------------------------------------
     // 7. Resume Preview Modal
@@ -224,58 +240,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeResumeModalBtn = document.getElementById('close-resume-modal');
     const resumeModalOverlay = document.getElementById('resume-modal-overlay');
 
-    openResumeBtn.addEventListener('click', () => {
-        resumeModal.classList.add('active');
-        resumeModal.setAttribute('aria-hidden', 'false');
-    });
-
-    function closeResumeModal() {
-        resumeModal.classList.remove('active');
-        resumeModal.setAttribute('aria-hidden', 'true');
-    }
-
-    closeResumeModalBtn.addEventListener('click', closeResumeModal);
-    resumeModalOverlay.addEventListener('click', closeResumeModal);
-
-    // Close modals on Escape key
-    // Auto-reply modal elements
-    const autoreplyModal = document.getElementById('autoreply-modal');
-    const closeAutoreplyModalBtn = document.getElementById('close-autoreply-modal');
-    const closeAutoreplyModalBtn2 = document.getElementById('close-autoreply-modal-btn');
-    const autoreplyModalOverlay = document.getElementById('autoreply-modal-overlay');
-    const copyAutoreplyTextBtn = document.getElementById('copy-autoreply-text');
-
-    function closeAutoreplyModal() {
-        if (autoreplyModal) {
-            autoreplyModal.classList.remove('active');
-            autoreplyModal.setAttribute('aria-hidden', 'true');
-        }
-    }
-
-    if (closeAutoreplyModalBtn) closeAutoreplyModalBtn.addEventListener('click', closeAutoreplyModal);
-    if (closeAutoreplyModalBtn2) closeAutoreplyModalBtn2.addEventListener('click', closeAutoreplyModal);
-    if (autoreplyModalOverlay) autoreplyModalOverlay.addEventListener('click', closeAutoreplyModal);
-
-    if (copyAutoreplyTextBtn) {
-        copyAutoreplyTextBtn.addEventListener('click', () => {
-            const replyMsg = `Hello, I receive your mail! I will reply to you in the meantime. Thank you! - Abhiroopa Bhagavathi N`;
-            navigator.clipboard.writeText(replyMsg).then(() => {
-                showToast('Auto-reply text copied to clipboard!');
-            });
+    if (openResumeBtn && resumeModal) {
+        openResumeBtn.addEventListener('click', () => {
+            resumeModal.classList.add('active');
+            resumeModal.setAttribute('aria-hidden', 'false');
         });
     }
 
-    // Close modals on Escape key
+    function closeResumeModal() {
+        if (resumeModal) {
+            resumeModal.classList.remove('active');
+            resumeModal.setAttribute('aria-hidden', 'true');
+        }
+    }
+
+    if (closeResumeModalBtn) closeResumeModalBtn.addEventListener('click', closeResumeModal);
+    if (resumeModalOverlay) resumeModalOverlay.addEventListener('click', closeResumeModal);
+
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             closeProjectModal();
             closeResumeModal();
-            closeAutoreplyModal();
         }
     });
 
     // ----------------------------------------------------------------------
-    // 8. Contact Form Handling & Automated Reply Engine Trigger
+    // 8. Contact Form Handling (EmailJS Real Dual-Flow Integration)
     // ----------------------------------------------------------------------
     const contactForm = document.getElementById('contact-form');
     const nameInput = document.getElementById('user-name');
@@ -283,27 +273,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const subjectInput = document.getElementById('user-subject');
     const messageInput = document.getElementById('user-message');
     const submitBtn = document.getElementById('submit-btn');
-    const demoAutoreplyBtn = document.getElementById('demo-autoreply-btn');
-
-    function triggerAutoReplyModal(senderName, senderEmail, subjectText) {
-        const recipientEl = document.getElementById('auto-reply-recipient');
-        const subjectEl = document.getElementById('auto-reply-subject');
-        const nameEl = document.getElementById('auto-reply-name');
-        const timestampEl = document.getElementById('auto-reply-timestamp');
-
-        const now = new Date();
-        const formattedTime = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ', ' + now.toLocaleDateString();
-
-        if (recipientEl) recipientEl.textContent = senderEmail || 'visitor@example.com';
-        if (subjectEl) subjectEl.textContent = subjectText ? `Re: ${subjectText}` : 'Re: Thank you for reaching out!';
-        if (nameEl) nameEl.textContent = senderName || 'Friend';
-        if (timestampEl) timestampEl.textContent = formattedTime;
-
-        if (autoreplyModal) {
-            autoreplyModal.classList.add('active');
-            autoreplyModal.setAttribute('aria-hidden', 'false');
-        }
-    }
 
     if (contactForm) {
         contactForm.addEventListener('submit', (e) => {
@@ -311,7 +280,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             let isValid = true;
 
-            // Reset error states
             [nameInput, emailInput, messageInput].forEach(i => {
                 if (i) i.classList.remove('invalid');
             });
@@ -338,63 +306,40 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (isValid) {
-                const targetEmail = "abhiroopabhagavathi@gmail.com";
-
-                // Show button sending state
                 if (submitBtn) {
                     submitBtn.disabled = true;
                     submitBtn.innerHTML = `
                         <svg class="spinner" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation: spin 1s linear infinite;"><circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-dashoffset="10"></circle></svg>
-                        <span>Dispatching Message...</span>
+                        <span>Sending...</span>
                     `;
                 }
 
-                // Spring Boot Backend API payload
-                const contactPayload = {
-                    name: nameVal,
-                    email: emailVal,
-                    subject: subjectVal || "Portfolio Inquiry",
+                const templateParams = {
+                    user_name: nameVal,
+                    user_email: emailVal,
+                    subject: subjectVal || 'Portfolio Contact Inquiry',
                     message: messageVal
                 };
 
-                // Attempt Spring Boot backend post
-                fetch("/api/contact", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(contactPayload)
-                }).catch(() => {
-                    // Fallback to Web3Forms if standalone frontend static server
-                    const formData = new FormData();
-                    formData.append("access_key", "c83e18a9-4674-4b5b-9d56-a1856c9a3bbd");
-                    formData.append("name", nameVal);
-                    formData.append("email", emailVal);
-                    formData.append("subject", subjectVal || `New Portfolio Inquiry from ${nameVal}`);
-                    formData.append("message", messageVal);
-                    fetch("https://api.web3forms.com/submit", { method: "POST", body: formData }).catch(() => {});
-                });
-
-                // Mailto fallback link
-                const mailBody = `Hello Abhiroopa,\n\nName: ${nameVal}\nEmail: ${emailVal}\n\nMessage:\n${messageVal}`;
-                const mailtoUrl = `mailto:${targetEmail}?subject=${encodeURIComponent(subjectVal || "Portfolio Inquiry")}&body=${encodeURIComponent(mailBody)}`;
-
-                setTimeout(() => {
+                // Real EmailJS dual-flow dispatching
+                Promise.all([
+                    emailjs.send(SERVICE_ID, TEMPLATE_ID_NOTIFICATION, templateParams, PUBLIC_KEY),
+                    emailjs.send(SERVICE_ID, TEMPLATE_ID_AUTOREPLY, templateParams, PUBLIC_KEY)
+                ]).then(() => {
+                    contactForm.reset();
+                    showToast("Thank you! Your message has been sent. A confirmation email has been dispatched to your inbox.", "success");
+                }).catch(err => {
+                    console.error("EmailJS Error:", err);
+                    showToast("Unable to send message right now. Please email directly at abhiroopabhagavathivsb27@gmail.com.", "error");
+                }).finally(() => {
                     if (submitBtn) {
                         submitBtn.disabled = false;
                         submitBtn.innerHTML = `
-                            <span class="btn-text">Send Message & Trigger Auto-Reply</span>
+                            <span class="btn-text">Send Message</span>
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                         `;
                     }
-
-                    showToast(`Message processed! Automated response triggered.`);
-                    
-                    // Open mail client fallback
-                    window.location.href = mailtoUrl;
-
-                    // Trigger Auto-Responder Receipt Modal
-                    triggerAutoReplyModal(nameVal, emailVal, subjectVal);
-                    contactForm.reset();
-                }, 600);
+                });
 
             } else {
                 showToast('Please fill out all required fields correctly.', 'error');
@@ -402,19 +347,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Quick Auto-Responder Demo Button
-    if (demoAutoreplyBtn) {
-        demoAutoreplyBtn.addEventListener('click', () => {
-            showToast('Triggering Instant Auto-Responder Demo...');
-            triggerAutoReplyModal(
-                'Alex Morgan (Recruiter)',
-                'alex.morgan@techcorp.com',
-                'Software Engineering / Backend Role Opportunity'
-            );
-        });
-    }
-
-    // Add keyframe animation for button spinner dynamically if needed
+    // Dynamic keyframe animation for button spinner
     const style = document.createElement('style');
     style.textContent = `@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`;
     document.head.appendChild(style);
@@ -470,7 +403,6 @@ document.addEventListener('DOMContentLoaded', () => {
             toast.style.opacity = '0';
             toast.style.transform = 'translateX(100%)';
             setTimeout(() => toast.remove(), 300);
-        }, 3500);
+        }, 4000);
     }
 });
-
