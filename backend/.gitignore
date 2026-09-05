@@ -1,0 +1,19 @@
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!target/classes/META-INF/MANIFEST.MF
+
+# IDE Configuration
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+.vscode/
+
+# Local Environment Variables & Secrets
+.env
+*.log
+
+# OS Metadata
+.DS_Store
+Thumbs.db

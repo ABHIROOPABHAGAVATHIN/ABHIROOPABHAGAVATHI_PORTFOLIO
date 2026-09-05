@@ -130,79 +130,50 @@ document.addEventListener('DOMContentLoaded', () => {
     // 6. Project Detail Modal Content & Data
     // ----------------------------------------------------------------------
     const projectData = {
-        jwt: {
-            title: "JWT Authentication REST API (Spring Boot)",
-            type: "Backend & Security",
-            tech: ["Java", "Spring Boot", "Spring Security", "JWT Token", "Spring Data JPA", "H2 Database", "Postman"],
+        finvigil: {
+            title: "FinVigil Central — Credit Underwriting & AML Surveillance Backend",
+            type: "Event-Driven Backend • Java & Spring Boot (In Progress)",
+            tech: ["Java", "Spring Boot", "Drools", "RabbitMQ", "Redis", "PostgreSQL"],
             description: `
-                <p><strong>Overview:</strong> A secure backend service implementing JSON Web Token (JWT) authentication and role-based authorization using Java and Spring Boot.</p>
+                <p><strong>Overview:</strong> Event-driven loan underwriting and Anti-Money Laundering (AML) surveillance backend architecture designed to decouple high-latency financial risk decisioning from HTTP API request paths.</p>
                 <br>
                 <h4>Key Features & Architecture:</h4>
                 <ul style="padding-left: 1.2rem; margin-top: 0.5rem; line-height: 1.6;">
-                    <li><strong>User Registration & Login:</strong> Built Spring Security authentication filters to handle credentials verification and issue signed JWT tokens.</li>
-                    <li><strong>Protected Endpoints:</strong> Designed custom SecurityFilterChain to validate JWT headers on every incoming HTTP request to grant access to protected resources.</li>
-                    <li><strong>Data Layer Integration:</strong> Integrated Spring Data JPA with in-memory H2 database for efficient user credential persistence.</li>
-                    <li><strong>Testing & Postman Collection:</strong> Rigorously tested API endpoints (register, login, token refresh, protected user dashboard) using Postman.</li>
-                </ul>
-            `
-        },
-        usermgmt: {
-            title: "User Management REST API (MySQL & Spring Boot)",
-            type: "Backend & Database",
-            tech: ["Java", "Spring Boot", "MySQL", "Spring Data JPA", "Hibernate", "HikariCP", "REST APIs"],
-            description: `
-                <p><strong>Overview:</strong> Production-style backend microservice offering scalable CRUD management for user accounts connected to MySQL database.</p>
-                <br>
-                <h4>Key Highlights:</h4>
-                <ul style="padding-left: 1.2rem; margin-top: 0.5rem; line-height: 1.6;">
-                    <li><strong>Layered Architecture:</strong> Structured application across Controller, Service, and Repository layers following strict Object-Oriented principles.</li>
-                    <li><strong>HikariCP Connection Pooling:</strong> Configured HikariCP database pool parameters for optimized database connections under concurrent loads.</li>
-                    <li><strong>Hibernate ORM Mapping:</strong> Mapped Java entity models to relational database tables with proper indexing and dynamic exception handling.</li>
-                </ul>
-            `
-        },
-        langchain: {
-            title: "LangChain RAG Document & Q&A Assistant",
-            type: "AI & LangChain Framework",
-            tech: ["LangChain", "Python", "Vector Databases", "Embeddings", "Groq API", "Streamlit"],
-            description: `
-                <p><strong>Overview:</strong> Conversational retrieval assistant utilizing Retrieval-Augmented Generation (RAG) to query technical documents and deliver precise context-aware answers.</p>
-                <br>
-                <h4>Key Features:</h4>
-                <ul style="padding-left: 1.2rem; margin-top: 0.5rem; line-height: 1.6;">
-                    <li><strong>Vector Indexing:</strong> Processed PDF/text files into chunked document vectors stored in vector stores (Chroma/Pinecone).</li>
-                    <li><strong>Contextual QA:</strong> Leverages LangChain retrieval chains with Groq API LLMs to retrieve relevant document passages before generating answers.</li>
+                    <li><strong>RabbitMQ Async Decoupling:</strong> Implemented RabbitMQ messaging queues to offload credit underwriting tasks asynchronously, keeping REST API response times sub-second.</li>
+                    <li><strong>Drools Rules Engine:</strong> Designed a declarative, auditable Drools rule set evaluating DTI (Debt-to-Income) ratios, credit scores, and employment verification checks with clear trigger logs.</li>
+                    <li><strong>Redis Sliding-Window AML Detection:</strong> Built real-time heuristics using Redis sliding-window counters to flag AML transaction structuring and rapid transfer anomalies.</li>
+                    <li><strong>PostgreSQL Audit Schema:</strong> Formulated relational database schemas for applicants, loans, transactions, and AML alerts with immutable audit history logs.</li>
                 </ul>
             `
         },
         logsage: {
-            title: "LogSage AI – Log File Anomaly Explainer",
-            type: "AI & Full-Stack Python App",
+            title: "LogSage AI — Log File Anomaly Explainer",
+            type: "AI & Full-Stack Python Tool",
             tech: ["Python", "Streamlit", "Groq API", "Ollama", "SQLite", "Plotly", "ReportLab"],
             description: `
-                <p><strong>Overview:</strong> Intelligent log analysis tool parsing system logs, detecting anomalies, and generating explanations using LLMs with rule-based fallback.</p>
+                <p><strong>Overview:</strong> AI-powered log analysis platform parsing system logs, identifying anomalies, and generating plain-language diagnostic explanations for engineering teams.</p>
                 <br>
                 <h4>Architectural Highlights:</h4>
                 <ul style="padding-left: 1.2rem; margin-top: 0.5rem; line-height: 1.6;">
-                    <li><strong>Multi-Engine AI:</strong> Groq API cloud model with local Ollama fallback for uninterrupted incident parsing.</li>
-                    <li><strong>Streamlit Dashboard:</strong> Interactive visualizer with incident timeline graphs, severity tracking, and automated PDF report downloads.</li>
+                    <li><strong>Dual-Engine LLM Analysis:</strong> Integrated cloud-based Groq API LLM processing alongside local Ollama execution with an automated rule-based fallback system for high reliability.</li>
+                    <li><strong>Interactive Streamlit Dashboard:</strong> Engineered a streamlined dashboard featuring log upload, real-time severity tracking, Plotly incident timelines, and SQLite storage.</li>
+                    <li><strong>Automated PDF/CSV Export:</strong> Generated formatted incident reports using ReportLab for audit records and team sharing.</li>
                 </ul>
             `
         },
-        calendar: {
-            title: "Interactive Calendar Web App (2025)",
-            type: "Web Development",
-            tech: ["HTML5", "CSS3", "JavaScript (ES6)", "DOM Manipulation", "LocalStorage"],
-            description: `
-                <p><strong>Overview:</strong> Interactive calendar app allowing users to assign custom notes and photo memories to individual calendar dates.</p>
-            `
-        },
         retail: {
-            title: "Online Retail Sales Dashboard (Power BI)",
-            type: "Business Intelligence & Data Analytics",
-            tech: ["Power BI", "DAX Measures", "Data Cleaning", "Data Modeling", "Business Intelligence"],
+            title: "Online Retail Sales Dashboard",
+            type: "Business Intelligence & Analytics",
+            tech: ["Power BI", "DAX Measures", "Data Cleaning", "Data Modeling", "Sales Analytics"],
             description: `
-                <p><strong>Overview:</strong> E-commerce BI dashboard displaying revenue analytics, category performance, customer retention metrics, and DAX measures.</p>
+                <p><strong>Overview:</strong> Executive business intelligence dashboard transforming raw e-commerce transaction data into interactive analytics visualizers.</p>
+                <br>
+                <h4>Key Highlights:</h4>
+                <ul style="padding-left: 1.2rem; margin-top: 0.5rem; line-height: 1.6;">
+                    <li><strong>Data Preprocessing & Modeling:</strong> Performed comprehensive data cleaning, null handling, and entity-relationship modeling across sales datasets.</li>
+                    <li><strong>DAX KPI Calculations:</strong> Formulated dynamic DAX expressions to compute sales growth rates, customer retention rates, average order values (AOV), and category revenues.</li>
+                    <li><strong>Executive Visualizations:</strong> Built multi-page dashboards surfacing trend analysis and regional performance indicators for data-driven decisions.</li>
+                </ul>
             `
         }
     };
@@ -374,37 +345,50 @@ document.addEventListener('DOMContentLoaded', () => {
                     submitBtn.disabled = true;
                     submitBtn.innerHTML = `
                         <svg class="spinner" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation: spin 1s linear infinite;"><circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-dashoffset="10"></circle></svg>
-                        <span>Redirecting to Mail & Dispatching...</span>
+                        <span>Dispatching Message...</span>
                     `;
                 }
 
-                // Construct real mailto URL to redirect user's mail client directly to abhiroopabhagavathi@gmail.com
+                // Spring Boot Backend API payload
+                const contactPayload = {
+                    name: nameVal,
+                    email: emailVal,
+                    subject: subjectVal || "Portfolio Inquiry",
+                    message: messageVal
+                };
+
+                // Attempt Spring Boot backend post
+                fetch("/api/contact", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(contactPayload)
+                }).catch(() => {
+                    // Fallback to Web3Forms if standalone frontend static server
+                    const formData = new FormData();
+                    formData.append("access_key", "c83e18a9-4674-4b5b-9d56-a1856c9a3bbd");
+                    formData.append("name", nameVal);
+                    formData.append("email", emailVal);
+                    formData.append("subject", subjectVal || `New Portfolio Inquiry from ${nameVal}`);
+                    formData.append("message", messageVal);
+                    fetch("https://api.web3forms.com/submit", { method: "POST", body: formData }).catch(() => {});
+                });
+
+                // Mailto fallback link
                 const mailBody = `Hello Abhiroopa,\n\nName: ${nameVal}\nEmail: ${emailVal}\n\nMessage:\n${messageVal}`;
                 const mailtoUrl = `mailto:${targetEmail}?subject=${encodeURIComponent(subjectVal || "Portfolio Inquiry")}&body=${encodeURIComponent(mailBody)}`;
 
-                // Attempt Web3Forms HTTP API dispatch asynchronously
-                const formData = new FormData();
-                formData.append("access_key", "c83e18a9-4674-4b5b-9d56-a1856c9a3bbd");
-                formData.append("name", nameVal);
-                formData.append("email", emailVal);
-                formData.append("subject", subjectVal || `New Portfolio Inquiry from ${nameVal}`);
-                formData.append("message", messageVal);
-
-                fetch("https://api.web3forms.com/submit", { method: "POST", body: formData }).catch(() => {});
-
-                // Delay slightly for smooth UI response, then redirect & show auto-responder receipt
                 setTimeout(() => {
                     if (submitBtn) {
                         submitBtn.disabled = false;
                         submitBtn.innerHTML = `
-                            <span class="btn-text">Send Real Email & Trigger Auto-Reply</span>
+                            <span class="btn-text">Send Message & Trigger Auto-Reply</span>
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                         `;
                     }
 
-                    showToast(`Redirecting mail to ${targetEmail}! Automated response triggered.`);
+                    showToast(`Message processed! Automated response triggered.`);
                     
-                    // Open mail redirect
+                    // Open mail client fallback
                     window.location.href = mailtoUrl;
 
                     // Trigger Auto-Responder Receipt Modal
